@@ -63,7 +63,7 @@ void ft_eat(t_philo *philo);
 void ft_think(t_philo *philo);
 void *start_execution(t_data *data);
 int get_cuurent_time(void);
-
+void ft_print(t_philo *philo, const char *msg);
 
 
 

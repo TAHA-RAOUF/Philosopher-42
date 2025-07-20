@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 16:31:29 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/20 17:48:31 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/20 17:59:10 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,6 @@ void ft_sleep(int milliseconds)
     usleep(milliseconds * 1000); // Convert milliseconds to microseconds
 }
 
-void ft_print(t_philo *philo, const char *msg)
-{
-    pthread_mutex_lock(&philo->data->print_mutex);
-    printf("Philosopher %d %s at time %d ms\n", philo->id, msg, get_cuurent_time());
-    pthread_mutex_unlock(&philo->data->print_mutex);
-}
 void ft_think(t_philo *philo)
 {
     ft_print(philo, "is thinking");

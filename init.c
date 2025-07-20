@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:15:13 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/20 16:50:48 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/20 18:33:50 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,26 @@
 t_philo *init_philosophers(t_data *data)
 {
     int i;
-    i = 0;
-    data->philo = malloc(sizeof(t_philo) * data->num_philosophers);
-    if (!data->philo)
-        return NULL; // Handle memory allocation failure
+    t_philo *philos;
+
+    philos = malloc(sizeof(t_philo) * data->num_philosophers);
+    if (!philos)
+        return NULL;
+    
     while (i < data->num_philosophers)
     {
-        data->philo[i].id = i + 1;
-        data->philo[i].meals_eaten = 0;
-        data->philo[i].last_meal_time = get_cuurent_time(); // Initialize last meal time
-        data->philo[i].left_fork = &data->forks[i];
-        data->philo[i].data = data;
-        data->philo[i].right_fork = &data->forks[(i + 1) % data->num_philosophers]; // Next philo
+        philos[i].id = i + 1;
+        philos[i].meals_eaten = 0;
+        philos[i].last_meal_time = get_cuurent_time();
+        philos[i].data = data;
+        assign_forks(data);
+        pthread_mutex_init(&philos[i].last_meal_time_mutex, NULL);
+        pthread_mutex_init(&philos[i].meals_eaten_mutex, NULL);
         i++;
     }
-    return (data->philo);
+    return (philos);
 }
+
 
 void init_data(int ac, char *av[], t_data *data)
 {
@@ -42,23 +46,45 @@ void init_data(int ac, char *av[], t_data *data)
         data->meals_required = ft_atoi(av[5]);
     else
         data->meals_required = -1;
-    data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
-    data->philo = init_philosophers(data);
+    data->simulation_over = 0;
 }
 
 int init_mutexes(t_data *data)
 {
     int i;
 
-    i = 0;
-    while (i < data->num_philosophers)
+    data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
+    if (!data->forks)
+        return 0;
+
+    while(i < data->num_philosophers)
     {
-        if (pthread_mutex_init(&data->forks[i], NULL) != 0)
-            return -1;
+        pthread_mutex_init(&data->forks[i], NULL);
         i++;
     }
-    if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
-        return -1;
-    return 0;
+    data->last_meal_time_mutex = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
+    if (!data->last_meal_time_mutex)
+        return 0;
+    while(i < data->num_philosophers)
+    {
+        pthread_mutex_init(&data->last_meal_time_mutex[i], NULL);
+        i++;
+    }
+    pthread_mutex_init(&data->print_mutex, NULL);
+    return 1; 
 }
+
+void assign_forks(t_data *data)
+{
+    int i;
+
+    for (i = 0; i < data->num_philosophers; i++)
+    {
+        data->philo[i].left_fork = &data->forks[i];
+        data->philo[i].right_fork = &data->forks[(i + 1) % data->num_philosophers];
+    }
+}
+
+
+
 
