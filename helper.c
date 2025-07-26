@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:22:11 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/20 17:58:54 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/26 15:02:20 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,17 @@ void ft_memset(void *ptr, int value, size_t num)
     }
 }
 
-int get_cuurent_time(void) 
+int get_current_time(void) 
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    return (tv.tv_sec * 1000 + tv.tv_usec / 1000); // Convert to milliseconds
+    return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
 void ft_print(t_philo *philo, const char *msg) 
 {
+    int elapsed_time = get_current_time() - philo->data->start_time;
     pthread_mutex_lock(&philo->data->print_mutex);
-    printf("Philosopher %d %s at time %d ms\n", philo->id, msg, get_cuurent_time());
+    printf("%d %d %s\n", elapsed_time, philo->id, msg);
     pthread_mutex_unlock(&philo->data->print_mutex);
 }

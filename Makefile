@@ -6,7 +6,7 @@
 #    By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 00:00:00 by moraouf           #+#    #+#              #
-#    Updated: 2025/07/20 17:13:03 by moraouf          ###   ########.fr        #
+#    Updated: 2025/07/26 14:38:15 by moraouf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ DEBUG_FLAGS = -g -fsanitize=thread
 INCLUDE = -I.
 
 # Source files
-SRCS = main.c init.c parssing.c helper.c philo.c
+SRCS = main.c init.c parssing.c helper.c philo.c monitor.c
 
 # Object files
 OBJS = $(SRCS:.c=.o)

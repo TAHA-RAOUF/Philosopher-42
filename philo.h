@@ -29,8 +29,7 @@ typedef struct s_philo {
     pthread_t thread;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;
-    pthread_mutex_t *last_meal_time_mutex;
-    pthread_mutex_t *meals_eaten_mutex;
+    // pthread_mutex_t *meals_eaten_mutex;
     t_data *data;
 } t_philo;
 
@@ -40,9 +39,11 @@ typedef struct s_data {
     int time_to_sleep;
     int time_to_die;
     int meals_required;
+    int start_time;
     pthread_mutex_t *forks;
     pthread_mutex_t print_mutex;
     pthread_mutex_t *last_meal_time_mutex;
+    pthread_mutex_t *death;
     int simulation_over;
     t_philo *philo;
 } t_data;
@@ -61,9 +62,10 @@ void ft_print(t_philo *philo, const char *msg);
 void ft_sleep(int milliseconds);
 void ft_eat(t_philo *philo);
 void ft_think(t_philo *philo);
+void *philosopher_routine(void *philo);
 void *start_execution(t_data *data);
-int get_cuurent_time(void);
-void ft_print(t_philo *philo, const char *msg);
+void *monitor(void *arg);
+int get_current_time(void);
 
 
 
