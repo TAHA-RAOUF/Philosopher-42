@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:15:13 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/26 15:02:23 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/27 18:29:47 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ t_philo *init_philosophers(t_data *data)
 void init_data(int ac, char *av[], t_data *data)
 {
     data->num_philosophers = ft_atoi(av[1]);
-    data->time_to_eat = ft_atoi(av[2]);
-    data->time_to_sleep = ft_atoi(av[3]);
-    data->time_to_die = ft_atoi(av[4]);
+    data->time_to_eat = ft_atoi(av[3]);
+    data->time_to_sleep = ft_atoi(av[4]);
+    data->time_to_die = ft_atoi(av[2]);
     if (ac == 6)
         data->meals_required = ft_atoi(av[5]);
     else
@@ -98,6 +98,7 @@ int init_mutexes(t_data *data)
         i++;
     }
     pthread_mutex_init(&data->print_mutex, NULL);
+    pthread_mutex_init(&data->simulation_over_mutex, NULL);
     return 1; 
 }
 

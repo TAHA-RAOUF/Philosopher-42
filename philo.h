@@ -43,6 +43,7 @@ typedef struct s_data {
     pthread_mutex_t *forks;
     pthread_mutex_t print_mutex;
     pthread_mutex_t *last_meal_time_mutex;
+    pthread_mutex_t simulation_over_mutex;
     pthread_mutex_t *death;
     int simulation_over;
     t_philo *philo;
@@ -65,6 +66,7 @@ void ft_think(t_philo *philo);
 void *philosopher_routine(void *philo);
 void *start_execution(t_data *data);
 void *monitor(void *arg);
+int is_simulation_over(t_data *data);
 int get_current_time(void);
 
 

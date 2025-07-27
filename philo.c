@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 16:31:29 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/26 15:02:23 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/27 19:00:19 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,40 @@
 
 void ft_eat(t_philo *philo)
 {
+    if (is_simulation_over(philo->data)) return;
+    
     // Deadlock prevention: odd philosophers pick left first, even pick right first
     if (philo->id % 2 == 1) {
         // Odd philosopher: left fork first
         pthread_mutex_lock(philo->left_fork);
+        if (is_simulation_over(philo->data)) {
+            pthread_mutex_unlock(philo->left_fork);
+            return;
+        }
         ft_print(philo, "has taken a fork");
         
         pthread_mutex_lock(philo->right_fork);
+        if (is_simulation_over(philo->data)) {
+            pthread_mutex_unlock(philo->right_fork);
+            pthread_mutex_unlock(philo->left_fork);
+            return;
+        }
         ft_print(philo, "has taken a fork");
     } else {
         // Even philosopher: right fork first
         pthread_mutex_lock(philo->right_fork);
+        if (is_simulation_over(philo->data)) {
+            pthread_mutex_unlock(philo->right_fork);
+            return;
+        }
         ft_print(philo, "has taken a fork");
         
         pthread_mutex_lock(philo->left_fork);
+        if (is_simulation_over(philo->data)) {
+            pthread_mutex_unlock(philo->left_fork);
+            pthread_mutex_unlock(philo->right_fork);
+            return;
+        }
         ft_print(philo, "has taken a fork");
     }
     
@@ -57,23 +77,39 @@ void ft_sleep(int milliseconds)
 void ft_think(t_philo *philo)
 {
     ft_print(philo, "is thinking");
+    if(philo->data->num_philosophers % 2 != 0)
+        usleep(philo->data->time_to_eat * 1000);
+        
     // No sleep needed for thinking in the standard philosophers problem
 }
 
 void  *philosopher_routine(void *philo)
 {
     t_philo *philos = (t_philo *)philo;
-    while (!philos->data->simulation_over)
+    
+    if(philos->data->num_philosophers == 1)
     {
-        ft_eat(philos); // Philosopher eats
-        if (philos->data->simulation_over) break;
+        ft_print(philo,"is eating");
+        usleep(philos->data->time_to_die);
+        ft_print(philo,"is died");
+        exit(1);
+    }
+    // Small delay for even philosophers to prevent timing issues
+    if (philos->id % 2 == 0) {
+        usleep(1000); // 1ms delay
+    }
+    while (!is_simulation_over(philos->data))
+    {
         
+        if (is_simulation_over(philos->data)) break;
+        ft_eat(philos); // Philosopher eats
+        
+        if (is_simulation_over(philos->data)) break;
         ft_print(philos, "is sleeping");
         ft_sleep(philos->data->time_to_sleep); // Philosopher sleeps
-        if (philos->data->simulation_over) break;
         
+        if (is_simulation_over(philos->data)) break;
         ft_think(philos); // Philosopher thinks
-        if (philos->data->simulation_over) break;
     }
     return NULL;
 }

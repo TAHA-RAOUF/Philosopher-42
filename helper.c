@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:22:11 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/26 15:02:20 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/27 18:16:35 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,17 @@ void ft_print(t_philo *philo, const char *msg)
 {
     int elapsed_time = get_current_time() - philo->data->start_time;
     pthread_mutex_lock(&philo->data->print_mutex);
-    printf("%d %d %s\n", elapsed_time, philo->id, msg);
+    if (!is_simulation_over(philo->data)) {
+        printf("%d %d %s\n", elapsed_time, philo->id, msg);
+    }
     pthread_mutex_unlock(&philo->data->print_mutex);
+}
+
+int is_simulation_over(t_data *data)
+{
+    int result;
+    pthread_mutex_lock(&data->simulation_over_mutex);
+    result = data->simulation_over;
+    pthread_mutex_unlock(&data->simulation_over_mutex);
+    return result;
 }
