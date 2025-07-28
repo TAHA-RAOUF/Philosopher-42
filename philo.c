@@ -6,13 +6,11 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 16:31:29 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/27 19:00:19 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/28 15:32:25 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-
 
 void ft_eat(t_philo *philo)
 {
@@ -43,7 +41,7 @@ void ft_eat(t_philo *philo)
             return;
         }
         ft_print(philo, "has taken a fork");
-        
+    
         pthread_mutex_lock(philo->left_fork);
         if (is_simulation_over(philo->data)) {
             pthread_mutex_unlock(philo->left_fork);
@@ -54,8 +52,13 @@ void ft_eat(t_philo *philo)
     }
     
     ft_print(philo, "is eating");
+    pthread_mutex_lock(&philo->data->last_meal_time_mutex[philo->id - 1]);
     philo->last_meal_time = get_current_time() - philo->data->start_time; // Update last meal time (relative)
+    pthread_mutex_unlock(&philo->data->last_meal_time_mutex[philo->id - 1]);
+    
+    pthread_mutex_lock(&philo->data->meals_eaten_mutex[philo->id - 1]);
     philo->meals_eaten++;
+    pthread_mutex_unlock(&philo->data->meals_eaten_mutex[philo->id - 1]);
     
     ft_sleep(philo->data->time_to_eat); // Simulate eating time
     
@@ -91,8 +94,7 @@ void  *philosopher_routine(void *philo)
     {
         ft_print(philo,"is eating");
         usleep(philos->data->time_to_die);
-        ft_print(philo,"is died");
-        exit(1);
+        return NULL;
     }
     // Small delay for even philosophers to prevent timing issues
     if (philos->id % 2 == 0) {

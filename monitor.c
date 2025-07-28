@@ -6,11 +6,41 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 17:55:56 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/27 18:26:22 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/28 15:32:29 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int check_meals_completed(t_data *data)
+{
+    int i;
+    int philosophers_done;
+
+    if (data->meals_required == -1)
+        return 0; // No meal limit, simulation continues
+    
+    philosophers_done = 0;
+    i = 0;
+    while (i < data->num_philosophers)
+    {
+        pthread_mutex_lock(&data->meals_eaten_mutex[i]);
+        if (data->philo[i].meals_eaten >= data->meals_required)
+            philosophers_done++;
+        pthread_mutex_unlock(&data->meals_eaten_mutex[i]);
+        i++;
+    }
+    
+    // If all philosophers have eaten enough meals, end simulation
+    if (philosophers_done >= data->num_philosophers)
+    {
+        pthread_mutex_lock(&data->simulation_over_mutex);
+        data->simulation_over = 1;
+        pthread_mutex_unlock(&data->simulation_over_mutex);
+        return 1;
+    }
+    return 0;
+}
 
 void *monitor(void *arg)
 {
@@ -20,6 +50,10 @@ void *monitor(void *arg)
 
     while (!is_simulation_over(data))
     {
+        // Check if all philosophers have eaten enough meals
+        if (check_meals_completed(data))
+            return NULL;
+            
         i = 0;
         while( i < data->num_philosophers)
         {

@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:15:13 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/27 18:29:47 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/28 15:32:33 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,15 @@ int init_mutexes(t_data *data)
     while(i < data->num_philosophers)
     {
         pthread_mutex_init(&data->last_meal_time_mutex[i], NULL);
+        i++;
+    }
+    data->meals_eaten_mutex = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
+    if (!data->meals_eaten_mutex)
+        return 0;
+    i = 0;  // Reset i to 0
+    while(i < data->num_philosophers)
+    {
+        pthread_mutex_init(&data->meals_eaten_mutex[i], NULL);
         i++;
     }
     pthread_mutex_init(&data->print_mutex, NULL);
