@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:15:13 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/28 15:32:33 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/29 16:42:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ t_philo *init_philosophers(t_data *data)
     assign_forks(data);
     return (philos);
 }
-
 
 void init_data(int ac, char *av[], t_data *data)
 {
