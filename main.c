@@ -19,11 +19,6 @@ int main(int argc, char *argv[])
     if(!data.philo)
         return EXIT_FAILURE;
     start_execution(&data); // Start the philosopher simulation
-    free(data.philo);
-    free(data.forks);
-    free(data.last_meal_time_mutex);
-    free(data.meals_eaten_mutex);
-    pthread_mutex_destroy(&data.print_mutex);
-    pthread_mutex_destroy(&data.simulation_over_mutex);
+    ft_clean(&data);
     return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:22:11 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/27 18:16:35 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/30 09:49:12 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,22 @@ int is_simulation_over(t_data *data)
     result = data->simulation_over;
     pthread_mutex_unlock(&data->simulation_over_mutex);
     return result;
+}
+
+void ft_clean(t_data *data)
+{
+    int i = 0;
+    while(i < data->num_philosophers)
+    {
+        pthread_mutex_destroy(&data->forks[i]);
+        pthread_mutex_destroy(&data->last_meal_time_mutex[i]);
+        pthread_mutex_destroy(&data->meals_eaten_mutex[i]);
+        i++;
+    }
+    pthread_mutex_destroy(&data->simulation_over_mutex);
+    pthread_mutex_destroy(&data->print_mutex);
+    free(data->philo);
+    free(data->forks);
+    free(data->last_meal_time_mutex);
+    free(data->meals_eaten_mutex);
 }

@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 16:31:29 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/28 15:32:25 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/07/30 10:15:04 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,16 @@ void  *philosopher_routine(void *philo)
     
     if(philos->data->num_philosophers == 1)
     {
-        ft_print(philo,"is eating");
+        ft_print(philo,"has taken a fork");
         usleep(philos->data->time_to_die);
         return NULL;
     }
-    // Small delay for even philosophers to prevent timing issues
-    if (philos->id % 2 == 0) {
+    if (philos->id % 2 == 0)
         usleep(1000); // 1ms delay
-    }
     while (!is_simulation_over(philos->data))
-    {
-        
-        if (is_simulation_over(philos->data)) break;
+    {        
+        if (is_simulation_over(philos->data)) 
+        break;
         ft_eat(philos); // Philosopher eats
         
         if (is_simulation_over(philos->data)) break;

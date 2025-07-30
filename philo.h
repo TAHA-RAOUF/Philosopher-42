@@ -70,6 +70,7 @@ void *start_execution(t_data *data);
 void *monitor(void *arg);
 int check_meals_completed(t_data *data);
 int is_simulation_over(t_data *data);
+void ft_clean(t_data *data);
 int get_current_time(void);
 
 

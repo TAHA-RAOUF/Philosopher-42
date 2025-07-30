@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:15:13 by moraouf           #+#    #+#             */
-/*   Updated: 2025/07/29 16:42:35 by marvin           ###   ########.fr       */
+/*   Updated: 2025/07/30 09:54:05 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ t_philo *init_philosophers(t_data *data)
         philos[i].meals_eaten = 0;
         philos[i].last_meal_time = 0; // Start with 0 (relative to start_time)
         philos[i].data = data;
-        // pthread_mutex_init(&philos[i].last_meal_time_mutex, NULL);
-        // pthread_mutex_init(&philos[i].meals_eaten_mutex, NULL);
         i++;
     }
     data->philo = philos;  // Set data->philo before calling assign_forks
@@ -80,28 +78,17 @@ int init_mutexes(t_data *data)
     data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
     if (!data->forks)
         return 0;
-
+    data->last_meal_time_mutex = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
+    if (!data->last_meal_time_mutex)
+        return (free(data->forks) , 0);
+    data->meals_eaten_mutex = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
+    if (!data->meals_eaten_mutex)
+        return (free(data->forks) , free(data->last_meal_time_mutex) , 0); 
     i = 0;
     while(i < data->num_philosophers)
     {
         pthread_mutex_init(&data->forks[i], NULL);
-        i++;
-    }
-    data->last_meal_time_mutex = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
-    if (!data->last_meal_time_mutex)
-        return 0;
-    i = 0;  // Reset i to 0
-    while(i < data->num_philosophers)
-    {
         pthread_mutex_init(&data->last_meal_time_mutex[i], NULL);
-        i++;
-    }
-    data->meals_eaten_mutex = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
-    if (!data->meals_eaten_mutex)
-        return 0;
-    i = 0;  // Reset i to 0
-    while(i < data->num_philosophers)
-    {
         pthread_mutex_init(&data->meals_eaten_mutex[i], NULL);
         i++;
     }
@@ -109,8 +96,3 @@ int init_mutexes(t_data *data)
     pthread_mutex_init(&data->simulation_over_mutex, NULL);
     return 1; 
 }
-
-
-
-
-
