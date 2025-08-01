@@ -6,7 +6,7 @@
 #    By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/15 00:00:00 by moraouf           #+#    #+#              #
-#    Updated: 2025/07/26 14:38:15 by moraouf          ###   ########.fr        #
+#    Updated: 2025/08/01 22:26:25 by moraouf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,11 @@ NAME = philo
 # Compiler and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread -g
-DEBUG_FLAGS = -g -fsanitize=thread
+DEBUG_FLAGS = -g -pthread
 INCLUDE = -I.
 
 # Source files
-SRCS = main.c init.c parssing.c helper.c philo.c monitor.c
+SRCS = main.c init.c parssing.c helper.c philo.c monitor.c logique.c
 
 # Object files
 OBJS = $(SRCS:.c=.o)
@@ -77,7 +77,7 @@ test: $(NAME)
 # Check for memory leaks (requires valgrind)
 valgrind: $(NAME)
 	@echo "$(YELLOW)Running valgrind...$(NC)"
-	valgrind --tool=helgrind --history-level=approx ./$(NAME) 4 410 200 200
+	valgrind --tool=helgrind --history-level=approx ./$(NAME) 3 610 200 200 5
 
 # Help
 help:
