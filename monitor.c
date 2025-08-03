@@ -6,7 +6,7 @@
 /*   By: moraouf <moraouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 17:55:56 by moraouf           #+#    #+#             */
-/*   Updated: 2025/08/01 22:20:37 by moraouf          ###   ########.fr       */
+/*   Updated: 2025/08/02 19:07:27 by moraouf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	ft_check(t_data *data)
 	{
 		current_time = get_current_time() - data->start_time;
 		pthread_mutex_lock(&data->last_meal_time_mutex[i]);
-		if ((current_time - data->philo[i].last_meal_time) > data->time_to_die)
+		if ((current_time - data->philo[i].last_meal_time) >= data->time_to_die)
 		{
 			ft_print(&data->philo[i], "died");
 			pthread_mutex_lock(&data->simulation_over_mutex);
